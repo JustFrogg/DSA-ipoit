@@ -1,6 +1,7 @@
 package by.it.a_khmelev.lesson02;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 /*
 Даны события events
@@ -38,7 +39,16 @@ public class A_VideoRegistrator {
         //и теперь пропустим все покрываемые события
         //за время до конца работы, увеличивая индекс
 
+        while (i < events.length) {
+            double startTime = events[i]; // фиксируем момент включения регистратора
+            result.add(startTime);
+            double endTime = startTime + workDuration; // рассчитываем момент выключения
 
-        return result;                        //вернем итог
+            // пропускаем все события, которые попадают в интервал работы регистратора
+            while (i < events.length && events[i] <= endTime) {
+                i++;
+            }
+        }
+        return result;
     }
 }

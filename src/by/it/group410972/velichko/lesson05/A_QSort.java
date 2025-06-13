@@ -1,7 +1,9 @@
-package by.it.a_khmelev.lesson05;
+package by.it.group410972.rak.lesson05;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 /*
@@ -10,18 +12,14 @@ import java.util.Scanner;
 Известны данные о том, когда каждая из них включалась и выключалась (отрезки работы)
 Известен список событий на площади (время начала каждого события).
 Вам необходимо определить для каждого события сколько камер его записали.
-
 В первой строке задано два целых числа:
     число включений камер (отрезки) 1<=n<=50000
     число событий (точки) 1<=m<=50000.
-
 Следующие n строк содержат по два целых числа ai и bi (ai<=bi) -
 координаты концов отрезков (время работы одной какой-то камеры).
 Последняя строка содержит m целых чисел - координаты точек.
 Все координаты не превышают 10E8 по модулю (!).
-
 Точка считается принадлежащей отрезку, если она находится внутри него или на границе.
-
 Для каждой точки в порядке их появления во вводе выведите,
 скольким отрезкам она принадлежит.
     Sample Input:
@@ -31,7 +29,6 @@ import java.util.Scanner;
     1 6 11
     Sample Output:
     1 0 0
-
 */
 
 public class A_QSort {
@@ -68,7 +65,29 @@ public class A_QSort {
         }
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
+        Arrays.sort(segments, Comparator.comparingInt(s -> s.start));
 
+        // Чтобы быстрее искать по stop, отдельно отсортируем массив всех концов
+        int[] starts = new int[n];
+        int[] ends = new int[n];
+        for (int i = 0; i < n; i++) {
+            starts[i] = segments[i].start;
+            ends[i] = segments[i].stop;
+        }
+        Arrays.sort(starts);
+        Arrays.sort(ends);
+
+        // Для каждой точки ищем количество отрезков, которые её покрывают
+        for (int i = 0; i < m; i++) {
+            int point = points[i];
+
+            // Кол-во отрезков, у которых начало <= point
+            int left = upperBound(starts, point);
+            // Кол-во отрезков, у которых конец < point
+            int right = lowerBound(ends, point);
+
+            result[i] = left - right;
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
@@ -92,6 +111,31 @@ public class A_QSort {
 
             return 0;
         }
+    }
+
+    int lowerBound(int[] array, int value) {
+        int left = 0, right = array.length;
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (array[mid] < value)
+                left = mid + 1;
+            else
+                right = mid;
+        }
+        return left;
+    }
+
+    // upperBound: первое число > value
+    int upperBound(int[] array, int value) {
+        int left = 0, right = array.length;
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (array[mid] <= value)
+                left = mid + 1;
+            else
+                right = mid;
+        }
+        return left;
     }
 
 }

@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson03;
+package by.it.group410972.rak.lesson03;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -74,23 +74,61 @@ public class C_HeapMax {
         //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
 
-        int siftDown(int i) { //просеивание вверх
-
+        int siftUp(int i) {
+            while (i > 0) {
+                int parent = (i - 1) / 2;
+                if (heap.get(i) <= heap.get(parent)) {
+                    break;
+                }
+                swap(i, parent);
+                i = parent;
+            }
             return i;
         }
 
-        int siftUp(int i) { //просеивание вниз
+        int siftDown(int i) {
+            int size = heap.size();
+            while (true) {
+                int left = 2 * i + 1;
+                int right = 2 * i + 2;
+                int largest = i;
 
+                if (left < size && heap.get(left) > heap.get(largest)) {
+                    largest = left;
+                }
+                if (right < size && heap.get(right) > heap.get(largest)) {
+                    largest = right;
+                }
+                if (largest == i) break;
+
+                swap(i, largest);
+                i = largest;
+            }
             return i;
         }
 
-        void insert(Long value) { //вставка
+        void insert(Long value) {
+            heap.add(value);
+            siftUp(heap.size() - 1);
         }
 
-        Long extractMax() { //извлечение и удаление максимума
-            Long result = null;
-
+        Long extractMax() {
+            if (heap.isEmpty()) return null;
+            Long result = heap.get(0);
+            int last = heap.size() - 1;
+            if (last > 0) {
+                heap.set(0, heap.get(last));
+            }
+            heap.remove(last);
+            if (!heap.isEmpty()) siftDown(0);
+            System.out.print(result); // для вывода на экран
             return result;
+        }
+
+        void swap(int i, int j) {
+            Long tmp = heap.get(i);
+            heap.set(i, heap.get(j));
+            heap.set(j, tmp);
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
     }

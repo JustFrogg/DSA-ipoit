@@ -1,6 +1,7 @@
 package by.it.a_khmelev.lesson02;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 /*
 Даны интервальные события events
@@ -29,12 +30,21 @@ public class B_Sheduler {
         //в период [from, int] (включительно).
         //оптимизация проводится по наибольшему числу непересекающихся событий.
         //Начало и конец событий могут совпадать.
-        List<Event> result;
-        result = new ArrayList<>();
-        //ваше решение.
+        List<Event> result = new ArrayList<>();
 
+        // Сортируем события по времени окончания (жадный выбор самого раннего завершения)
+        Arrays.sort(events, (e1, e2) -> Integer.compare(e1.stop, e2.stop));
 
-        return result;          //вернем итог
+        int lastEndTime = from;
+
+        for (Event event : events) {
+            if (event.start >= lastEndTime && event.stop <= to) {
+                result.add(event);
+                lastEndTime = event.stop;
+            }
+        }
+
+        return result;
     }
 
     //событие у аудитории(два поля: начало и конец)

@@ -1,7 +1,9 @@
-package by.it.a_khmelev.lesson03;
+package by.it.group410972.rak.lesson03;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -57,7 +59,30 @@ public class B_Huffman {
         Integer length = scanner.nextInt();
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
+        scanner.nextLine(); // перейти на следующую строку после чисел
 
+        // Считаем код символа в Map<String, Character>
+        Map<String, Character> codeToChar = new HashMap<>();
+        for (int i = 0; i < count; i++) {
+            String line = scanner.nextLine();
+            // Формат: "a: 0"
+            char ch = line.charAt(0);
+            String code = line.substring(3);
+            codeToChar.put(code, ch);
+        }
+
+        // Считываем кодированную строку
+        String encoded = scanner.nextLine();
+
+        // Постепенно накапливаем код и пытаемся найти символ
+        StringBuilder temp = new StringBuilder();
+        for (char c : encoded.toCharArray()) {
+            temp.append(c);
+            if (codeToChar.containsKey(temp.toString())) {
+                result.append(codeToChar.get(temp.toString()));
+                temp.setLength(0); // сбросить буфер
+            }
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111

@@ -1,6 +1,5 @@
-package by.it.a_khmelev.lesson08;
+package by.it.group410972.rak.lesson08;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -11,25 +10,21 @@ import java.util.Scanner;
 Найдите максимальную сумму, которую можно получить, идя по лестнице
 снизу вверх (от нулевой до n-й ступеньки), каждый раз поднимаясь на
 одну или на две ступеньки.
-
 Sample Input 1:
 2
 1 2
 Sample Output 1:
 3
-
 Sample Input 2:
 2
 2 -1
 Sample Output 2:
 1
-
 Sample Input 3:
 3
 -1 2 1
 Sample Output 3:
 3
-
 */
 
 public class C_Stairs {
@@ -45,7 +40,14 @@ public class C_Stairs {
         int result = 0;
 
 
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+        dp[1] = stairs[0];
 
+        for (int i = 2; i <= n; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[i - 2]) + stairs[i - 1];
+        }
+        result = dp[n];
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
